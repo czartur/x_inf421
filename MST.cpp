@@ -7,7 +7,9 @@ using namespace std;
 // INPUT : Graph G
 // OUTPUT : Tree T
 
-class Edge{ 
+const int INT_MAX = 2147483647;
+
+class Edge{  
     public :
     int u; // first vertice
     int v; // second vertice
@@ -65,6 +67,30 @@ vector<vector<pair<int,int>>> to_adj_list(vector<Edge> &edge_list, int n){
 
 void print(vector<Edge> tree){
     for(auto edge : tree) cout << edge << endl;
+}
+
+
+// compute max noise level (BFS approach)
+int query(int u, int v, vector<vector<pair<int,int>>> &adj){
+    vector<int> vis((int) adj.size());
+    queue <pair<int,int>> q;
+    q.push({u,0});
+
+    while(!q.empty()){
+        int u = q.front().first;
+        int max_noise = q.front().second;
+        q.pop();
+
+        if(u == v) return max_noise;
+
+        for(int i=0; i< (int) adj[u].size(); i++){
+            int cur_u = adj[u][i].first;
+            int cur_weight = adj[u][i].second;
+            if(!vis[cur_u]) q.push({cur_u, max(max_noise, cur_weight)});
+        }
+    }
+
+    return -1; // v unreachable from u
 }
 
 int main(){
