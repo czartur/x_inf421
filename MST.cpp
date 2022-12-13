@@ -11,19 +11,19 @@ class Edge{
     public :
     int u; // first vertice
     int v; // second vertice
-    int w; // weight
+    int c; // weight
     
-    Edge(int n_u, int n_v, int n_w) : u{n_u}, v{n_v}, w{n_w} {};
+    Edge(int n_u, int n_v, int n_c) : u{n_u}, v{n_v}, c{n_c} {};
    
     bool operator<(const Edge& edge) const {
-        return make_pair(w, make_pair(v, u)) > make_pair(edge.w, make_pair(edge.v, edge.u)); // inverse order sorting
+        return make_pair(c, make_pair(v, u)) > make_pair(edge.c, make_pair(edge.v, edge.u)); // inverse order sorting
     }
 
     friend ostream& operator<<(ostream& os, const Edge& edge);
 };
 
 ostream&  operator<<(ostream&os, const Edge& edge){
-    os << edge.u << " <--[" << edge.w << "]--> " << edge.v;
+    os << edge.u << " <--[" << edge.c << "]--> " << edge.v;
     return os;
 }
 
@@ -43,7 +43,7 @@ vector<Edge> MST(vector<vector<pair<int,int>>> &adj){
         
         if(vis[v]) continue;
         vis[v] = true;
-        if(edge.w != -1) tree.push_back(edge);
+        if(edge.c != -1) tree.push_back(edge);
 
         for(auto cur : adj[v]){
             if(vis[cur.second]) continue;
@@ -52,6 +52,15 @@ vector<Edge> MST(vector<vector<pair<int,int>>> &adj){
     }
 
     return tree;
+}
+
+vector<vector<pair<int,int>>> to_adj_list(vector<Edge> &edge_list, int n){
+    vector<vector<pair<int,int>>> ans(n);
+    for(auto edge : edge_list){
+        ans[edge.u].push_back({edge.v, edge.c});
+        ans[edge.v].push_back({edge.u, edge.c});
+    }
+    return ans;
 }
 
 void print(vector<Edge> tree){
