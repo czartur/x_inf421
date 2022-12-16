@@ -6,7 +6,7 @@
 #include "MST.h"
 using namespace std;
 
-#Using HINT (exercice 3)
+//Using HINT (exercice 3)
 
 vector<vector<int>> g;
 vector<int> tin, tout;
