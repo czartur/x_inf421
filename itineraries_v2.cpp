@@ -12,6 +12,17 @@ vector<vector<int>> g;
 vector<int> tin, tout;
 vector<vector<int>> up;
 
+void dfs(int v) {
+    for (int l = 1; l < logn; l++)
+        up[v][l] = up[up[v][l - 1]][l - 1];
+    tin[v] = t++;
+    for (int u : g[v]) {
+        up[u][0] = v;
+        dfs(u);
+    }
+    tout[v] = t;
+}
+
 bool upper (int a, int b) {
 	return tin[a] <= tin[b] && tout[a] >= tout[b];
 }
