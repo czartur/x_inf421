@@ -12,8 +12,8 @@ vector<vector<int>> g;
 vector<int> tin, tout;
 vector<vector<int>> up;
 
-void dfs(int v) {
-    for (int l = 1; l < logn; l++)
+void dfs(int v, int n) {
+    for (int l = 1; l < (int) log(n); l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (int u : g[v]) {
