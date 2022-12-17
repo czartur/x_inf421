@@ -4,6 +4,8 @@
 #include "MST.h"
 using namespace std;
 
+//tested : https://www.interviewbit.com/problems/max-edge-queries/
+
 const int rt = 0; // root
 const int M = 25; // number of sparse jumps
 
