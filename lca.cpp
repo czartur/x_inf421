@@ -43,7 +43,7 @@ int query(int u, int v, vector<vector<int>> &anc, vector<vector<int>> &noise, ve
 
     // remise à niveau
 
-    for(int j=M; j>=0; j--) {
+    for(int j=M-1; j>=0; j--) {
         if(h[anc[j][u]] >= h[v]) {
             ans = max(ans, noise[j][u]);
             u = anc[j][u];
@@ -54,7 +54,7 @@ int query(int u, int v, vector<vector<int>> &anc, vector<vector<int>> &noise, ve
 
     if(u == v) return ans;
     
-    for(int j=M; j>=0; j--){
+    for(int j=M-1; j>=0; j--){
         if(anc[j][u] != anc[j][v]){
             ans = max(ans, noise[j][u]);
             ans = max(ans, noise[j][v]);
@@ -77,8 +77,8 @@ int main(){
     }
 
     edgeList = build_MST(edgeList, n);
-
     vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
+    
     vector<vector<int>> anc(M, vector<int>(n)), noise(M, vector<int>(n)); // [j][u] --> 2^j positions above u
     vector<int> h(n), vis(n);
 

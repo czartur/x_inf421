@@ -31,7 +31,7 @@ vector<Edge> build_MST(vector<Edge> &EdgeList, int n){
             tree.push_back(edge);
         }
     }
-
+    
     return tree;
 }
 
