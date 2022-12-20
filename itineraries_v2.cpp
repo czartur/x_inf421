@@ -48,5 +48,8 @@ int main()
         cin >> u >> v >> c;
         edgeList.push_back(Edge(u-1, v-1, c)); 
     }
+	
+    edgeList = build_MST(edgeList, n);
+    vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
 }
 
