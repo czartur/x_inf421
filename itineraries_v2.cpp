@@ -9,7 +9,7 @@ using namespace std;
 //Using HINT (exercice 3)
 
 vector<vector<int>> g;
-vector<int> tin, tout;
+vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
 vector<int> depth; // for every vertex 
 
