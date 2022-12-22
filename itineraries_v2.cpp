@@ -11,6 +11,7 @@ using namespace std;
 vector<vector<int>> g;
 vector<int> tin, tout;
 vector<vector<int>> up;
+vector<int> depth; // for every vertex 
 
 void dfs(int v, int n) {
     for (int l = 1; l < (int) log(n); l++)
@@ -51,5 +52,10 @@ int main()
 	
     edgeList = build_MST(edgeList, n);
     vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
+	
+    int l = lca(a, b, n);
+   // int distance_a = depth[a] - depth[l];
+    //int distance_b = depth[b] - depth[l];
+   // return distance_a + distance_b;
 }
 
