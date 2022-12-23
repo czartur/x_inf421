@@ -13,14 +13,14 @@ vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
 vector<int> depth; // for every vertex 
 int t=0;
-vector<Edge> edgeList;
+vector<vector<pair<int,int>>> adjList;
 
 void dfs(int v, int n) {
 	//a(n, vector<int>(m));
     for (int l = 1; l < (int) log(n); l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
-    for (int u : edgeList[v]) {
+    for (int u : adjList[v]) {
         up[u][0] = v;
         dfs(u,n);
     }
@@ -57,7 +57,7 @@ int main()
     }
 	
     edgeList = build_MST(edgeList, n);
-    vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
+    adjList = to_adj_list(edgeList, n);
     up.resize(n, vector<int>(log(n) + 1));
     tin.resize(n);
     tout.resize(n);
