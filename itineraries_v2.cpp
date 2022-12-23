@@ -41,10 +41,7 @@ int lca (int a, int b, int n)
 	for (int i = (int) log(n) + 1; i >= 0; i--)
 		if (!upper(up[a][i], b))
 			a = up[a][i];
-	for (int i = (int) log(n) + 1; i >= 0; i--)
-		if (!upper(up[b][i], b))
-			b = up[b][i];
-	return min(up[a][0], up[b][0]);
+	return up[a][0];
 }
 
 int main()
