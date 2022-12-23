@@ -10,6 +10,7 @@ using namespace std;
 
 vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
+vector<int> visited;
 int t=0;
 vector<vector<pair<int,int>>> adjList;
 
@@ -63,6 +64,7 @@ int main()
     up.resize(n, vector<int>((int)log(n) + 1));
     tin.resize(n);
     tout.resize(n);
+    visited.resize(n);
     dfs(0,n);
 
     cin >> l;
