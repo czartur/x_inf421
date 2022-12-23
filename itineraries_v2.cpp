@@ -13,13 +13,14 @@ vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
 vector<int> depth; // for every vertex 
 int t=0;
+vector<Edge> edgeList;
 
 void dfs(int v, int n) {
 	//a(n, vector<int>(m));
     for (int l = 1; l < (int) log(n); l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
-    for (int u : g[v]) {
+    for (int u : edgeList[v]) {
         up[u][0] = v;
         dfs(u,n);
     }
@@ -48,7 +49,7 @@ int main()
   //pour le moment comme ça, encore à penser
     int n, m, l;
     cin >> n >> m;
-    vector<Edge> edgeList;
+    
     while(m--){
         int u, v, c;
         cin >> u >> v >> c;
