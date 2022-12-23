@@ -21,7 +21,7 @@ void dfs(int v, int n) {
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (auto u : adjList[v]) {
-        up[u][0] = v;
+        up[u][0] = u.first;
         dfs(u,n);
     }
     tout[v] = t;
