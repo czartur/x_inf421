@@ -16,9 +16,6 @@ int t=0;
 
 void dfs(int v, int n) {
 	//a(n, vector<int>(m));
-    up.resize(n, vector<int>(log(n) + 1));
-    tin.resize(n);
-    tout.resize(n);
     for (int l = 1; l < (int) log(n); l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
@@ -60,7 +57,9 @@ int main()
 	
     edgeList = build_MST(edgeList, n);
     vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
-
+    up.resize(n, vector<int>(log(n) + 1));
+    tin.resize(n);
+    tout.resize(n);
     dfs(0,n);
 
     cin >> l;
