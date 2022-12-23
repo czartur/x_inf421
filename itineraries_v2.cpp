@@ -61,11 +61,11 @@ int main()
     tout.resize(n);
     dfs(0,n);
 
-  //  cin >> l;
+    cin >> l;
 
-    //while(l--){
-      //  int u, v;
-        //cin >> u >> v;
-        //cout << lca(u-1, v-1, n) << endl;
-    //}
+    while(l--){
+      int u, v;
+        cin >> u >> v;
+        cout << lca(u-1, v-1, n) << endl;
+    }
 }
