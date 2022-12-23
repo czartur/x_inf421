@@ -8,16 +8,14 @@ using namespace std;
 
 //Using HINT (exercice 3)
 
-vector<vector<int>> g;
 vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
-vector<int> depth; // for every vertex 
 int t=0;
 vector<vector<pair<int,int>>> adjList;
 
 void dfs(int v, int n) {
 	//a(n, vector<int>(m));
-    for (int l = 1; l < (int) log(n); l++)
+    for (int l = 0; l < (int) log(n) + 1; l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (auto u : adjList[v]) {
@@ -35,10 +33,10 @@ int lca (int a, int b, int n)
 {
 	if (upper(a, b))  return a;
 	if (upper(b, a))  return b;
-	for (int i = (int) log(n); i >= 0; i--)
+	for (int i = (int) log(n) + 1; i >= 0; i--)
 		if (!upper(up[a][i], b))
 			a = up[a][i];
-	for (int i = (int) log(n); i >= 0; i--)
+	for (int i = (int) log(n) + 1; i >= 0; i--)
 		if (!upper(up[b][i], b))
 			b = up[b][i];
 	return min(up[a][0], up[b][0]);
