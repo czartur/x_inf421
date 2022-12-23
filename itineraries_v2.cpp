@@ -56,7 +56,7 @@ int main()
 	
     edgeList = build_MST(edgeList, n);
     adjList = to_adj_list(edgeList, n);
-    up.resize(n, vector<int>(log(n) + 1));
+    up.resize(n, vector<int>((int)log(n) + 1));
     tin.resize(n);
     tout.resize(n);
     dfs(0,n);
