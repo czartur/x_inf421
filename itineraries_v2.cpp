@@ -12,14 +12,14 @@ vector<vector<int>> g;
 vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
 vector<int> depth; // for every vertex 
-
+int t = 0; // timer
 void dfs(int v, int n) {
     for (int l = 1; l < (int) log(n); l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (int u : g[v]) {
         up[u][0] = v;
-        dfs(u);
+        dfs(u, n);
     }
     tout[v] = t;
 }
