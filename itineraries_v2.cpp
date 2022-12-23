@@ -53,6 +53,13 @@ int main()
     edgeList = build_MST(edgeList, n);
     vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
 	
+    cin >> l;
+
+    while(l--){
+        int u, v;
+        cin >> u >> v;
+        cout << query(u-1, v-1, adjList) << endl;
+    }
     int l = lca(a, b, n);
    // int distance_a = depth[a] - depth[l];
     //int distance_b = depth[b] - depth[l];
