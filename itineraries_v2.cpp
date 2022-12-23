@@ -21,7 +21,7 @@ void dfs(int v, int n) {
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (auto u : adjList[v]) {
-	if (!visited[u])
+	if (!visited[u.first])
 	{
            up[u.first][0] = v;
            dfs(u.first,n);
