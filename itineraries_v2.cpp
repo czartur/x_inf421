@@ -12,6 +12,7 @@ vector<vector<int>> g;
 vector<int> tin, tout; //time_in, time_out
 vector<vector<int>> up;
 vector<int> depth; // for every vertex 
+int t=0;
 
 void dfs(int v, int n) {
     for (int l = 1; l < (int) log(n); l++)
@@ -19,7 +20,7 @@ void dfs(int v, int n) {
     tin[v] = t++;
     for (int u : g[v]) {
         up[u][0] = v;
-        dfs(u);
+        dfs(u,n);
     }
     tout[v] = t;
 }
@@ -55,7 +56,9 @@ int main()
 	
     edgeList = build_MST(edgeList, n);
     vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
-	
+
+    dfs(0,n);
+
     cin >> l;
 
     while(l--){
