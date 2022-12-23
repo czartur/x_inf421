@@ -15,12 +15,16 @@ vector<vector<pair<int,int>>> adjList;
 
 void dfs(int v, int n) {
 	//a(n, vector<int>(m));
+    visited[v] = true;
     for (int l = 0; l < (int) log(n) + 1; l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (auto u : adjList[v]) {
-        up[u.first][0] = v;
-        dfs(u.first,n);
+	if (!visited[u])
+	{
+           up[u.first][0] = v;
+           dfs(u.first,n);
+	}
     }
     tout[v] = t;
 }
