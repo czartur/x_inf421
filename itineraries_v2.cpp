@@ -20,7 +20,7 @@ void dfs(int v, int n) {
     for (int l = 1; l < (int) log(n); l++)
         up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
-    for (int u : adjList[v]) {
+    for (auto u : adjList[v]) {
         up[u][0] = v;
         dfs(u,n);
     }
