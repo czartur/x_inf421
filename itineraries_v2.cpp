@@ -49,7 +49,7 @@ int main()
   //pour le moment comme ça, encore à penser
     int n, m, l;
     cin >> n >> m;
-    
+     vector<Edge> edgeList;
     while(m--){
         int u, v, c;
         cin >> u >> v >> c;
