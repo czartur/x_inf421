@@ -58,11 +58,7 @@ int main()
     while(l--){
         int u, v;
         cin >> u >> v;
-        cout << query(u-1, v-1, adjList) << endl;
+        cout << lca(u-1, v-1, adjList) << endl;
     }
-    int l = lca(a, b, n);
-   // int distance_a = depth[a] - depth[l];
-    //int distance_b = depth[b] - depth[l];
-   // return distance_a + distance_b;
 }
 
