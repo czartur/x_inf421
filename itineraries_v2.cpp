@@ -61,7 +61,7 @@ int main()
     while(l--){
         int u, v;
         cin >> u >> v;
-        cout << lca(u-1, v-1, adjList) << endl;
+        cout << lca(u-1, v-1, n) << endl;
     }
 }
 
