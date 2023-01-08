@@ -1,13 +1,35 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include "UnionFind.h"
 #include "MST.h"
 using namespace std;
 
+
+// class Union Find
+
+UnionFind::UnionFind(int n){
+    size.assign(n,0);
+    for(int i=0; i<n; i++) par.push_back(i);
+}
+
+int UnionFind::find(int a) { return par[a] == a ? a : par[a] = find(par[a]); }
+
+void UnionFind::unite(int a, int b){
+
+    // compare set representatives
+    if((a = find(a)) == (b = find(b))) return; 
+
+    // link smallest to largest
+    if(size[a] < size[b]) swap(a,b); // a >= b always
+    par[b] = a;
+    size[a] += size[b]; 
+}
+
+bool UnionFind::isSame(int a, int b) { return find(a) == find(b); }
+
+
 // Kruskal's algo for MST
 // tested here : https://www.codechef.com/problems/DAY5P3
-
 
 Edge::Edge(int n_u, int n_v, int n_c) : u{n_u}, v{n_v}, c{n_c} {};
 
@@ -33,6 +55,27 @@ vector<Edge> build_MST(vector<Edge> &EdgeList, int n){
     }
     
     return tree;
+}
+
+void build_MST(vector<pair<int,int>> *adjList, vector<Edge> &EdgeList, int n){
+    vector<Edge> MStree;
+    sort(EdgeList.begin(), EdgeList.end());
+     
+    UnionFind UF = UnionFind(n);
+
+    // kruskal algorithm 
+    for(auto edge : EdgeList){
+        if(!UF.isSame(edge.u, edge.v)){
+            UF.unite(edge.u, edge.v);
+            MStree.push_back(edge);
+        }
+    }
+
+    // to adjacency list
+    for(auto edge : MStree){
+        adjList[edge.u].push_back({edge.v, edge.c});
+        adjList[edge.v].push_back({edge.u, edge.c});
+    }
 }
 
 void print(vector<Edge> tree){

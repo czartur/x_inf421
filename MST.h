@@ -5,6 +5,20 @@
 #include <vector>
 using namespace std;
 
+class UnionFind{
+    private:
+    vector<int> par, size;
+
+    public:
+    UnionFind(int n);
+
+    int find(int a);
+
+    void unite(int a, int b);
+
+    bool isSame(int a, int b);
+};
+
 struct Edge{  
     int u; // first vertice
     int v; // second vertice
@@ -17,8 +31,8 @@ struct Edge{
     friend ostream& operator<<(ostream& os, const Edge& edge);
 };
 
-
 vector<Edge> build_MST(vector<Edge> &EdgeList, int n);
+void build_MST(vector<pair<int,int>> *adjList, vector<Edge> &EdgeList, int n);
 
 void print(vector<Edge> tree);
 
