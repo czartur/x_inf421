@@ -55,7 +55,8 @@ int query(int u, int v, vector<vector<int>> &anc, vector<vector<int>> &noise, ve
     // lca from same level
 
     if(u == v) return ans;
-    
+    //if(u == v) return 1 + u;
+
     for(int j=M-1; j>=0; j--){
         if(anc[j][u] != anc[j][v]){
             ans = max(ans, noise[j][u]);
@@ -66,6 +67,7 @@ int query(int u, int v, vector<vector<int>> &anc, vector<vector<int>> &noise, ve
     }
     
     return max(ans, max(noise[0][u], noise[0][v]));
+    //return 1 + anc[0][u];
 }
 
 int main(){
