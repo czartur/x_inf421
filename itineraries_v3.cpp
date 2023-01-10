@@ -11,8 +11,8 @@ const int M = 3e5+5;
 int n, m, l;
 int vis[N], par[N], len[N];
 vector<int> qList[L];
-vector<pair<int,int>> adjList[N];
-unordered_map<int, vector<pair<int,int>>> S;
+vector<pair<int,int>> adjList[N], lca_inv[N];
+//unordered_map<int, vector<pair<int,int>>> S;
 
 
 inline ll key(int a, int b){
@@ -28,24 +28,29 @@ pair<int,int> find(int x, int cur_len){
 }
 
 void dfs_lca(int u, int parent, unordered_map<ll, int> &pmax){
-    vis[u] = 1;
-    par[u] = u;
+    par[u] = u; // make a set containing u
 
-    for(int v : qList[u]) if(vis[v]) 
-    S[find(v,0).first].push_back({u,v});
-
-    for(auto [v,w] : adjList[u]){
-        if(v == parent) continue; 
-        dfs_lca(v, u, pmax);
-        len[v] = w; 
-        par[v] = u;
+    // accessing children of u 
+    for(auto [v,w] : adjList[u]){ 
+        if(v == parent) continue;  
+        dfs_lca(v, u, pmax); 
+        len[v] = w; // max len from v to the represent of its set (initialy the edge to its parent)
+        par[v] = u; // unite v set to u 
     }
-    
-    for(auto [x,y]: S[u]){
+
+    vis[u] = 1; // u was post order traversed
+
+    // finding lca of possible (u,v) queries 
+    for(int v : qList[u]) if(vis[v]) // if v visited in post order traversal
+    lca_inv[find(v,0).first].push_back({u,v}); // 'move up' v to the representant of its set
+
+    for(auto [x,y]: lca_inv[u]){
+        // 'move up' x to its representant (we already did with y)
         find(x,0);
 
+        // is y the lca ? 
         if(y == u) pmax[key(x,y)] = pmax[key(y,x)] = len[x];
-        else pmax[key(x,y)] = pmax[key(y,x)] = max(len[x], len[y]);  
+        else pmax[key(x,y)] = pmax[key(y,x)] = max(len[x], len[y]);
     }
 } 
 

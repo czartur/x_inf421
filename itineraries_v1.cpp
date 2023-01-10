@@ -16,23 +16,29 @@ vector<pair<int,int>> adjList[N];
 int query(int u, int v){
     vector<int> vis(n);
     queue <pair<int,int>> q;
+
+    // start at u with zero max_noise 
     q.push({u,0});
 
     while(!q.empty()){
-        int u = q.front().first;
+        int cur = q.front().first;
         int max_noise = q.front().second;
         q.pop();
-        
-        if(u == v) return max_noise;
 
-        for(int i=0; i< (int) adjList[u].size(); i++){
-            int cur_u = adjList[u][i].first;
-            int cur_weight = adjList[u][i].second;
-            if(!vis[cur_u]) q.push({cur_u, max(max_noise, cur_weight)});
+        // test if v was reached
+        if(cur == v) return max_noise;
+
+        // iterate through childs of cur vertex
+        for(int i=0; i < (int) adjList[cur].size(); i++){
+            int child = adjList[u][i].first;
+            int noise = adjList[u][i].second;
+            
+            // if child not visited, add to queue and update maximum noise seen 
+            if(!vis[child]) q.push({child, max(max_noise, noise)});
         }
     }
 
-    return -1; // v unreachable from u
+    return -1; // v unreachable from u (expected to never happen)
 }
 
 int main(){
@@ -44,9 +50,6 @@ int main(){
         edgeList.push_back(Edge(u-1, v-1, c)); 
     }
     build_MST(adjList, edgeList, n);
-    
-    //edgeList = build_MST(edgeList, n);
-    //vector<vector<pair<int,int>>> adjList = to_adj_list(edgeList, n);
     
     cin >> l;
     while(l--){
