@@ -9,43 +9,48 @@ const int N = 2e5+5;
 const int M = 3e5+5;
 
 int n, m, l;
-int vis[N], par[N], len[N];
-vector<int> qList[L];
-vector<pair<int,int>> adjList[N];
-unordered_map<int, vector<pair<int,int>>> S;
+int vis[N], par[N], noise[N];
+vector<int> queryList[L];
+vector<pair<int,int>> adjList[N], lca_inv[N];
+//unordered_map<int, vector<pair<int,int>>> S;
 
 
 inline ll key(int a, int b){
     return (ll)a*(ll)n + (ll)b;
 }
 
-pair<int,int> find(int x, int cur_len){
+pair<int,int> find(int x, int cur_noise){
     if(par[x] == x) return {x,0};
 
-    pair<int,int> prox = find(par[x], len[x]);
+    pair<int,int> prox = find(par[x], noise[x]);
 
-    return {par[x] = prox.first, len[x] = max(len[x], prox.second)};
+    return {par[x] = prox.first, noise[x] = max(noise[x], prox.second)};
 }
 
 void dfs_lca(int u, int parent, unordered_map<ll, int> &pmax){
-    vis[u] = 1;
-    par[u] = u;
+    par[u] = u; // make a set containing u
 
-    for(int v : qList[u]) if(vis[v]) 
-    S[find(v,0).first].push_back({u,v});
-
-    for(auto [v,w] : adjList[u]){
-        if(v == parent) continue; 
-        dfs_lca(v, u, pmax);
-        len[v] = w; 
-        par[v] = u;
+    // accessing children of u 
+    for(auto [v,w] : adjList[u]){ 
+        if(v == parent) continue;  
+        dfs_lca(v, u, pmax); 
+        noise[v] = w; // max noise from v to the represent of its set (initialy the edge to its parent)
+        par[v] = u; // unite v set to u 
     }
-    
-    for(auto [x,y]: S[u]){
+
+    vis[u] = 1; // u was post order traversed
+
+    // finding lca of possible (u,v) queries 
+    for(int v : queryList[u]) if(vis[v]) // if v visited in post order traversal
+    lca_inv[find(v,0).first].push_back({u,v}); // 'move up' v to the head of its set
+ 
+    for(auto [x,y]: lca_inv[u]){
+        // 'move up' x to the head of its set (we already did it to y)
         find(x,0);
 
-        if(y == u) pmax[key(x,y)] = pmax[key(y,x)] = len[x];
-        else pmax[key(x,y)] = pmax[key(y,x)] = max(len[x], len[y]);  
+        // is y the lca ? 
+        if(y == u) pmax[key(x,y)] = pmax[key(y,x)] = noise[x];
+        else pmax[key(x,y)] = pmax[key(y,x)] = max(noise[x], noise[y]);
     }
 } 
 
@@ -69,8 +74,8 @@ int main(){
         u--;
         v--;
         queries.push_back(key(u,v));
-        qList[u].push_back(v);
-        qList[v].push_back(u);
+        queryList[u].push_back(v);
+        queryList[v].push_back(u);
     }
 
     unordered_map <ll, int> path_max;

@@ -18,13 +18,22 @@ vector<vector<int>> noise; //the noise in our graph
 void dfs(int v, int n)
 { 
     visited[v] = true;
+<<<<<<< HEAD
     tin[v] = t++;    
+=======
+    tin[v] = t++;
+>>>>>>> e78b16846c359a835c0efcb323f8a77ec5b05cb3
     for (auto u : adjList[v]) {
 	if (!visited[u.first])
 	{
            up[u.first][0] = v;
+<<<<<<< HEAD
            noise[0][u.first] = u.second;
            noise[u.first][0] = u.second;
+=======
+           noise[v][u.first] = u.second;
+           noise[u.first][v] = u.second;
+>>>>>>> e78b16846c359a835c0efcb323f8a77ec5b05cb3
            dfs(u.first,n);
 	}
     }
@@ -33,12 +42,21 @@ void dfs(int v, int n)
 
 //search the 2^i-th upestor and the max noise between this ancestor and the initial vertex 
 void search_ancestor_and_maxnoise(vector<vector<int>> &up, vector<vector<int>> &noise, int n){
+<<<<<<< HEAD
 
     up[0][0] = 0;
     for(int j = 1; j < (int) log(n) - 1; j++){
         for(int i = 0; i < n; i++){
             up[i][j] = up[i - 1][up[i - 1][j]];
             noise[i][j] = max(noise[i - 1][j], noise[i - 1][up[i - 1][j]]);
+=======
+    up[0][0] = 0;
+    int n = (int) uo[0].size();
+    for(int j = 1; j < (int) log(n) - 1; j++){
+        for(int i = 0; i < n; i++){
+            up[j][i] = up[j - 1][up[j - 1][i]];
+            noise[j][i] = max(noise[j - 1][i], noise[j - 1][up[j - 1][i]]);
+>>>>>>> e78b16846c359a835c0efcb323f8a77ec5b05cb3
         }
     }
 }
@@ -102,6 +120,17 @@ int main()
       int u, v;
         cin >> u >> v;
         cout << get_max(u-1, v-1, n) << endl;
+<<<<<<< HEAD
+=======
+    }
+    for (int i = 0; i < n; i++)
+    {
+    	for (int j = 0; j < n; j++)
+    	{
+   		cout << noise[i][j] << " ";
+    	}
+    	cout << '\n';
+>>>>>>> e78b16846c359a835c0efcb323f8a77ec5b05cb3
     }
     
 }
