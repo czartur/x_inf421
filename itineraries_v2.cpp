@@ -34,6 +34,7 @@ void dfs(int v, int n)
 //search the 2^i-th upestor and the max noise between this ancestor and the initial vertex 
 void search_ancestor_and_maxnoise(vector<vector<int>> &up, vector<vector<int>> &noise, int n){
     up[0][0] = 0;
+    int n = (int) uo[0].size();
     for(int j = 1; j < (int) log(n) - 1; j++){
         for(int i = 0; i < n; i++){
             up[j][i] = up[j - 1][up[j - 1][i]];
