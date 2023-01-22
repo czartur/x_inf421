@@ -6,69 +6,109 @@
 #include "MST.h"
 using namespace std;
 
-//Using HINT (exercice 3)
 
 vector<int> tin, tout; //time_in, time_out
-vector<vector<int>> up;
+vector<vector<int>> up; // we keep the ancestors 2 ** i here
 vector<int> visited;
-int t=0;
+int t = 0;
 vector<vector<pair<int,int>>> adjList;
+vector<vector<int>> noise; //the noise in our graph
 
-void dfs(int v, int n) {
-	//a(n, vector<int>(m));
+//preprocessing
+void dfs(int v, int n)
+{ 
     visited[v] = true;
-    for (int l = 0; l < (int) log(n) + 1; l++)
-        up[v][l] = up[up[v][l - 1]][l - 1];
     tin[v] = t++;
     for (auto u : adjList[v]) {
 	if (!visited[u.first])
 	{
            up[u.first][0] = v;
+           noise[v][u.first] = u.second;
+           noise[u.first][v] = u.second;
            dfs(u.first,n);
 	}
     }
     tout[v] = t;
 }
 
+//search the 2^i-th upestor and the max noise between this ancestor and the initial vertex 
+void search_ancestor_and_maxnoise(vector<vector<int>> &up, vector<vector<int>> &noise, int n){
+    up[0][0] = 0;
+    for(int j = 1; j < (int) log(n) - 1; j++){
+        for(int i = 0; i < n; i++){
+            up[j][i] = up[j - 1][up[j - 1][i]];
+            noise[j][i] = max(noise[j - 1][i], noise[j - 1][up[j - 1][i]]);
+        }
+    }
+}
+
+//watch if it is an ancestor or not
 bool upper (int a, int b) {
 	return tin[a] <= tin[b] && tout[a] >= tout[b];
 }
 
-int lca (int a, int b, int n) 
-{
-	if (upper(a, b))  return a;
-	if (upper(b, a))  return b;
-	for (int i = (int) log(n) + 1; i >= 0; i--)
-		if (!upper(up[a][i], b))
-			a = up[a][i];
-	return up[a][0];
+//search the maximum noise
+//problem is here
+int get_max(int v, int u, int n ) {
+    int res = 0;
+    if (v == u) return 0; // it is the same vertex
+    for (int l = (int) log(n) - 1 ;l >= 0; l--)
+    {
+        if (!upper(up[v][l], u))
+        {
+            v = up[v][l];
+            res = max(res, noise[v][l]);
+        }
+    }
+    for (int l = (int) log(n) - 1; l >= 0; l--)
+     {
+        if (!upper(up[u][l], v))
+        {
+            u = up[u][l];
+            res = max(res, noise[u][l]);
+        }
+     }
+    return max({res, noise[v][0], noise[u][0]});
 }
 
 int main()
 {
-  //pour le moment comme ça, encore à penser
     int n, m, l;
     cin >> n >> m;
-     vector<Edge> edgeList;
+    vector<Edge> edgeList;
+    //enter our graph with all edges and noises on the all edges
     while(m--){
         int u, v, c;
         cin >> u >> v >> c;
         edgeList.push_back(Edge(u-1, v-1, c)); 
     }
-	
+	//make a minimum spanning tree
     edgeList = build_MST(edgeList, n);
     adjList = to_adj_list(edgeList, n);
+    
+    //initialization of all the arrays
     up.resize(n, vector<int>((int)log(n) + 1));
+    noise.resize(n, vector<int>(n));
     tin.resize(n);
     tout.resize(n);
     visited.resize(n);
-    dfs(0,n);
-
+    
+    dfs(0, n);
+    search_ancestor_and_maxnoise(up, noise, n);
     cin >> l;
 
     while(l--){
       int u, v;
         cin >> u >> v;
-        cout << lca(u-1, v-1, n) << endl;
+        cout << get_max(u-1, v-1, n) << endl;
     }
+    for (int i = 0; i < n; i++)
+    {
+    	for (int j = 0; j < n; j++)
+    	{
+   		cout << noise[i][j] << " ";
+    	}
+    	cout << '\n';
+    }
+    
 }
