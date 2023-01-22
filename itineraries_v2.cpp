@@ -32,7 +32,7 @@ void dfs(int v, int n)
 }
 
 //search the 2^i-th upestor and the max noise between this ancestor and the initial vertex 
-void search_ancestor_and_maxnoise(vector<vector<int>> &up, vector<vector<int>> &noise, int n){
+void search_ancestor_and_maxnoise(int n){
 
     up[0][0] = 0;
     for(int j = 1; j < (int) log(n) - 1; j++){
@@ -88,14 +88,14 @@ int main()
     adjList = to_adj_list(edgeList, n);
     
     //initialization of all the arrays
-    up.resize(n, vector<int>((int)log(n) + 1));
+    up.resize(30, vector<int>(n));
     noise.resize(n, vector<int>(n));
     tin.resize(n);
     tout.resize(n);
     visited.resize(n);
     
     dfs(0, n);
-    search_ancestor_and_maxnoise(up, noise, n);
+    search_ancestor_and_maxnoise(n);
     cin >> l;
 
     while(l--){
