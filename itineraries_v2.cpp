@@ -55,18 +55,18 @@ int get_max(int v, int u, int n ) {
     if (v == u) return 0; // it is the same vertex
     for (int l = (int) log(n) - 1 ;l >= 0; l--)
     {
-        if (!upper(up[v][l], u))
+        if (!upper(up[l][v], u))
         {
-            v = up[v][l];
-            res = max(res, noise[v][l]);
+            v = up[l][v];
+            res = max(res, noise[l][v]);
         }
     }
     for (int l = (int) log(n) - 1; l >= 0; l--)
      {
-        if (!upper(up[u][l], v))
+        if (!upper(up[l][u], v))
         {
-            u = up[u][l];
-            res = max(res, noise[u][l]);
+            u = up[l][u];
+            res = max(res, noise[l][u]);
         }
      }
     return max({res, noise[0][u], noise[0][v]});
@@ -89,7 +89,7 @@ int main()
     
     //initialization of all the arrays
     up.resize(30, vector<int>(n));
-    noise.resize(n, vector<int>(n));
+    noise.resize(30, vector<int>(n));
     tin.resize(n);
     tout.resize(n);
     visited.resize(n);
