@@ -12,8 +12,6 @@ int n, m, l;
 int vis[N], par[N], noise[N];
 vector<int> queryList[L];
 vector<pair<int,int>> adjList[N], lca_inv[N];
-//unordered_map<int, vector<pair<int,int>>> S;
-
 
 inline ll key(int a, int b){
     return (ll)a*(ll)n + (ll)b;
@@ -66,14 +64,14 @@ int main(){
 
     build_MST(adjList, edgeList, n);
 
-    vector<ll> queries;
+    vector<pair<int,int>> queries;
     cin >> l;
     while(l--){
         int u, v;
         cin >> u >> v;
         u--;
         v--;
-        queries.push_back(key(u,v));
+        queries.push_back(make_pair(u,v));
         queryList[u].push_back(v);
         queryList[v].push_back(u);
     }
@@ -81,5 +79,12 @@ int main(){
     unordered_map <ll, int> path_max;
     dfs_lca(0, 0, path_max);
 
-    for(auto q : queries) cout << path_max[q] << endl;
+    // output solutions
+    for(auto [u,v] : queries) cout << path_max[key(u,v)] << endl;
+
+    // path_max[key(x,y)] : maps (x,y) to max noise in path (x --> y)
+
+    // we need to use the inline function 'key' to map (x,y) 
+    // to a (long long) x*n + y and use it as key in our map
+    // cause u_maps in C++ STL do not have built in hash functions for pair<int,int>  
 }
