@@ -7,5 +7,5 @@ Context: Graph ~ map of a city // edges ~ streets // edge weight ~ noise level o
 
 Problem:
 
-* INPUT: Graph G and a set of pairs (u,v)
-* OUTPUT: Compute max edge in a most pleasent itinerary between u and v
+* INPUT: Graph G and a set of queries : pairs (u,v)
+* OUTPUT: For each query (u,v) compute max edge in a most pleasent itinerary between u and v
