@@ -13,7 +13,7 @@ vector<pair<int,int>> adjList[N];
 
 // compute max noise level (BFS approach)
 int query(int u, int v){
-    vector<int> vis(n);
+    vector<bool> vis(n);
     queue <pair<int,int>> q;
 
     // start at u with zero max_noise 
@@ -24,15 +24,14 @@ int query(int u, int v){
         int max_noise = q.front().second;
         q.pop();
 
+        vis[cur] = true;
+
         // test if v was reached
         if(cur == v) return max_noise;
-
+        
         // iterate through childs of cur vertex
-        for(int i=0; i < (int) adjList[cur].size(); i++){
-            int child = adjList[u][i].first;
-            int noise = adjList[u][i].second;
-            
-            // if child not visited, add to queue and update maximum noise seen 
+        for(auto [child, noise] : adjList[cur]){
+            // if child not visited, add to queue and update maximum seen noise 
             if(!vis[child]) q.push({child, max(max_noise, noise)});
         }
     }
@@ -49,7 +48,7 @@ int main(){
         edgeList.push_back(Edge(u-1, v-1, c)); 
     }
     build_MST(adjList, edgeList, n);
-    
+
     cin >> l;
     while(l--){
         int u, v;
