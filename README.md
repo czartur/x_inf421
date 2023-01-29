@@ -1,8 +1,11 @@
 # INF421
-You are given a connected and undirected graph G = (V,E) representing the map of the city.
-For every edge e in E, there is a non-negative integer value ce indicating the noise level at the
-edge e.
-For a pair (u, v) of vertices from V , a most pleasant itinerary between u and v is a u-to-v path
-in the graph G such that the maximum noise level c_e of all edges e along this path is minimized.1
-You are given a set of queries, each containing a pair of vertices (u, v) from V . For each query,
-you need to compute the maximum noise level on a most pleasant itinerary between u and v.
+
+Given a connected and undirected graph G = (V,E), define a most pleasant itinerary between u and v as a (u --> v) path
+in the graph G such that the maximum edge along this path is minimized.
+
+Context: Graph ~ map of a city // edges ~ streets // edge weight ~ noise level of the street
+
+Problem:
+
+* INPUT: Graph G and a set of queries : pairs (u,v)
+* OUTPUT: For each query (u,v) compute max edge in a most pleasent itinerary between u and v
