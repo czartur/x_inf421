@@ -8,24 +8,23 @@ const int L = 5e5+5;
 const int N = 2e5+5;
 const int M = 3e5+5;
 
-int n, m, l;
+struct Query{
+    int u, v, ind;
+};
+
 int vis[N], par[N], noise[N];
-vector<int> queryList[L];
-vector<pair<int,int>> adjList[N], lca_inv[N];
+vector<pair<int,int>> queryList[L];
+vector<pair<int,int>> adjList[N];
+vector<Query> lca_inv[N];
 
-inline ll key(int a, int b){
-    return (ll)a*(ll)n + (ll)b;
+int find(int x){ // updates noise[y] and par[y] for y in [x, head of set) 
+    if(x == par[x]) return x;
+    int head = find(par[x]); 
+    noise[x] = max(noise[x], noise[par[x]]);
+    return par[x] = head;
 }
 
-pair<int,int> find(int x, int cur_noise){
-    if(par[x] == x) return {x,0};
-
-    pair<int,int> prox = find(par[x], noise[x]);
-
-    return {par[x] = prox.first, noise[x] = max(noise[x], prox.second)};
-}
-
-void dfs_lca(int u, int parent, unordered_map<ll, int> &pmax){
+void dfs_lca(int u, int parent, vector<int> &pmax){
     par[u] = u; // make a set containing u
 
     // accessing children of u 
@@ -39,52 +38,50 @@ void dfs_lca(int u, int parent, unordered_map<ll, int> &pmax){
     vis[u] = 1; // u was post order traversed
 
     // finding lca of possible (u,v) queries 
-    for(int v : queryList[u]) if(vis[v]) // if v visited in post order traversal
-    lca_inv[find(v,0).first].push_back({u,v}); // 'move up' v to the head of its set
+    for(auto [v,i] : queryList[u]) if(vis[v]) // if v visited in post order traversal
+    lca_inv[find(v)].push_back({u,v,i}); // 'move up' v to the head of its set
  
-    for(auto [x,y]: lca_inv[u]){
+    for(Query q: lca_inv[u]){
+        int x = q.u, y = q.v, i = q.ind;
+
         // 'move up' x to the head of its set (we already did it to y)
-        find(x,0);
+        find(x);
 
         // is y the lca ? 
-        if(y == u) pmax[key(x,y)] = pmax[key(y,x)] = noise[x];
-        else pmax[key(x,y)] = pmax[key(y,x)] = max(noise[x], noise[y]);
+        if(y == u) pmax[i] = noise[x];
+        else pmax[i] = max(noise[x], noise[y]);
     }
 } 
 
 int main(){ 
-    vector<Edge> edgeList;
-
+    int n, m, l;
     cin >> n >> m;
+
+    vector<Edge> edgeList;
     while(m--){
         int u, v, c;
         cin >> u >> v >> c;
+        // adjList[u-1].push_back({v-1,c});
+        // adjList[v-1].push_back({u-1,c});
         edgeList.push_back(Edge(u-1, v-1, c)); 
     }
 
     build_MST(adjList, edgeList, n);
 
-    vector<pair<int,int>> queries;
     cin >> l;
-    while(l--){
+    for(int i=0; i<l; i++){
         int u, v;
         cin >> u >> v;
         u--;
         v--;
-        queries.push_back(make_pair(u,v));
-        queryList[u].push_back(v);
-        queryList[v].push_back(u);
+        // note that it captures the indice 'i' 
+        queryList[u].push_back({v, i});
+        queryList[v].push_back({u, i});
     }
 
-    unordered_map <ll, int> path_max;
+    vector<int> path_max(l);
     dfs_lca(0, 0, path_max);
 
-    // output solutions
-    for(auto [u,v] : queries) cout << path_max[key(u,v)] << endl;
-
-    // path_max[key(x,y)] : maps (x,y) to max noise in path (x --> y)
-
-    // we need to use the inline function 'key' to map (x,y) 
-    // to a (long long) x*n + y and use it as key in our map
-    // cause u_maps in C++ STL do not have built in hash functions for pair<int,int>  
+    // output solutions by index order
+    for(auto ans : path_max) cout << ans << endl;
 }
