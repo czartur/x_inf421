@@ -14,7 +14,7 @@ if [ ! -d "time_mst" ]; then
   mkdir time_mst
 fi
 
-if [ ! -d "output_mst" ]; then
+if [ ! -d "/output_mst" ]; then
   mkdir output_mst
 fi
 
@@ -27,7 +27,7 @@ do
 done
 printf "\n" >> $DIR
 
-for i in input/*.in
+for i in input/input_mst/*.in
 do
   i=$(basename $i)
   i=${i%".in"}
@@ -36,7 +36,7 @@ do
   for run in $(seq 1 $N)
   do
     echo -n "," >> $DIR
-    duration=$( { time ./executable < input_mst/$i".in" > output_mst/$i".out" ;} 2>&1)
+    duration=$( { time ./executable < input/input_mst/$i".in" > output_mst/$i".out" ;} 2>&1)
     echo -n "$duration" >> $DIR
     echo "$duration"
   done
