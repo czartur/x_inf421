@@ -3,14 +3,12 @@
 #include <algorithm>
 #include "MST.h"
 using namespace std;
-#define db(x) cerr << #x << " == " << x << endl
 
 
 const int N = 2e5+5;
 const int K = 25;
 
-int t;
-int n, m, l;
+int T;
 
 vector<pair<int,int>> adjList[N];
 int up[K+2][N]; // sparse table of ancestors 
@@ -19,20 +17,20 @@ int tin[N], tout[N]; // time_in, time_out
 
 // preprocessing 
 void dfs(int v, int par){ 
-    tin[v] = t++;
+    tin[v] = T++;
     for (auto [u,w] : adjList[v]) {
         if (u == par) continue;
         up[0][u] = v;
         noise[0][u]= w;
         dfs(u, v);
     }
-    tout[v] = t;
+    tout[v] = T;
 }
 
 // fill sparse table accordingly :
 // * up[j][i] = 2^j-th ancestor of i 
 // * noise[j][i] = max noise between i and up[j][i]
-void search_ancestor_and_maxnoise(){
+void search_ancestor_and_maxnoise(int n){
 
     up[0][0] = 0; // parent's root (0) is itself 
     for(int j = 1; j < K; j++){
@@ -72,13 +70,16 @@ int query(int v, int u) {
 }
 
 int main(){
-    vector<Edge> edgeList;
-    
+    int n, m, l;
     cin >> n >> m;
+    
     //enter our graph with all edges and noises on the all edges
+    vector<Edge> edgeList;
     while(m--){
         int u, v, c;
         cin >> u >> v >> c;
+        // adjList[u-1].push_back({v-1,c});
+        // adjList[v-1].push_back({u-1,c});
         edgeList.push_back(Edge(u-1, v-1, c)); 
     }
 
@@ -86,7 +87,7 @@ int main(){
     build_MST(adjList, edgeList, n);
    
     dfs(0, 0);
-    search_ancestor_and_maxnoise();
+    search_ancestor_and_maxnoise(n);
 
     cin >> l;
     while(l--){
