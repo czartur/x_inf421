@@ -75,16 +75,18 @@ int main(){
     
     //enter our graph with all edges and noises on the all edges
     vector<Edge> edgeList;
-    while(m--){
+    for(int i=0; i<m; i++){
         int u, v, c;
         cin >> u >> v >> c;
-        // adjList[u-1].push_back({v-1,c});
-        // adjList[v-1].push_back({u-1,c});
-        edgeList.push_back(Edge(u-1, v-1, c)); 
+        if(m == n-1){
+            adjList[u-1].push_back({v-1,c});
+            adjList[v-1].push_back({u-1,c});
+        }
+        else edgeList.push_back(Edge(u-1, v-1, c)); 
     }
 
 	//make a minimum spanning tree
-    build_MST(adjList, edgeList, n);
+    if(m != n-1) build_MST(adjList, edgeList, n);
    
     dfs(0, 0);
     search_ancestor_and_maxnoise(n);

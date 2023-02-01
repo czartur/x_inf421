@@ -58,15 +58,17 @@ int main(){
     cin >> n >> m;
 
     vector<Edge> edgeList;
-    while(m--){
+    for(int i=0; i<m; i++){
         int u, v, c;
         cin >> u >> v >> c;
-        // adjList[u-1].push_back({v-1,c});
-        // adjList[v-1].push_back({u-1,c});
-        edgeList.push_back(Edge(u-1, v-1, c)); 
+        if(m == n-1){
+            adjList[u-1].push_back({v-1,c});
+            adjList[v-1].push_back({u-1,c});
+        }
+        else edgeList.push_back(Edge(u-1, v-1, c)); 
     }
 
-    build_MST(adjList, edgeList, n);
+    if(m != n-1) build_MST(adjList, edgeList, n);
 
     cin >> l;
     for(int i=0; i<l; i++){
